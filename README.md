@@ -1,2 +1,2 @@
-# Armand Labernardière et Tinwende Kenanja Sawadogo
+Armand Labernardière et Tinwende Kenanja Sawadogo
 
