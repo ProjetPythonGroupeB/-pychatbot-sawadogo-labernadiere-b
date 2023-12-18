@@ -19,8 +19,9 @@ Avant de commencer, assurez-vous d'installer les dépendances suivantes :
 ## Bugs Connus
 
 Bien que cela ne soit pas nécessairement un bug, une difficulté rencontrée concerne le déplacement des fichiers "clean" créés dans le dossier. Actuellement, cette opération doit être effectuée manuellement.
-Mon partenaire a eu quelques problèmes avec son ordinateur. De ce fait la majorité des programmes ont été faits sur ordinateur commun
 
-N'hésitez pas à signaler toute difficulté que vous pourriez rencontrer en créant une nouvelle issue sur notre [page GitHub du projet](lien GitHub).
+#Difficulés
+Gestion des fichiers, travaille en équipe car pas tout le monde aussi à l'aise
+
 
 
