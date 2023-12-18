@@ -4,28 +4,31 @@ import math
 # FONCTION POUR AIDER LE CODE
 
 def remplace_dans_nom(fichier):
+''' Prend en argument le nom d'un fichier et renvoit le nom du président inscrit dedans '''
     fichier = fichier.replace("Nomination_","")
     fichier = fichier.replace(".txt", "")
     fichier = fichier.replace("cleaned_", "")
     for caractere in fichier:
         if "0" <= caractere <= '9' :
-            fichier = fichier.replace(caractere, "")
+            fichier = fichier.replace(caractere, "") # On remplace tout ce qui n'est pas le nom
     return fichier
 
 def récupère_contenue(Dossier, fichiers):
+    '''Récupère le contenu d'un fichier '''
     repertoire_courant = os.getcwd()
-    chemin_fichier = os.path.join(repertoire_courant, Dossier , fichiers)
-    texte = open(chemin_fichier, 'r')
-    contenu = texte.read()
-    texte.close()
+    chemin_fichier = os.path.join(repertoire_courant, Dossier , fichiers) # Créer le chemin pour acceder au fichier
+    texte = open(chemin_fichier, 'r') # Ouvre le fichier
+    contenu = texte.read() # Récupère le contenu
+    texte.close() # Et le ferme
     return contenu
 
-def ajoute_dico(dico, liste_mot):   
+def ajoute_dico(dico, liste_mot):
+    '''Ajoute dans un dico chaque occurence de chaque mot dans une liste donné'''  
     for mot in liste_mot:
             if mot in dico:
-                dico[mot]+=1
+                dico[mot]+=1 # Si il est présent, on lui ajoute 1
             else:
-                dico[mot] =1
+                dico[mot] =1 # Sinon on le défini à 1
     return dico
 
 def list_of_files(directory, extension):
