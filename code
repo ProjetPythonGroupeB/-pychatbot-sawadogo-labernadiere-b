@@ -135,18 +135,8 @@ def supprime_ponct(Dossier):
 def tf(chaîne):
     '''Prend en entrée une chaîne de caractère et renvoie un dictionnaire
 contenant le nombre d'apparition de chaque mot'''
-    
-    dico = {}
-    # Initialise un dictionnaire vide
-    liste_mot = chaîne.split()
-    # Met tout les mots de la châine dans une liste
-    for mot in liste_mot:
-        if mot in dico:
-            dico[mot]+=1
-        else:
-            dico[mot] =1
-    # Si le mot est dans le dico, on augmente sa valeur de 1, sinon on l'ajoute
-    return dico
+    dico, liste_mot = {}, chaîne.split()
+    return ajoute_dico(dico, liste_mot) # On ajoute les occurence de chaque mot et renvoi
 
 def idf(Dossier):
     '''Prend en argument le dossier contenant tous les textes nettoyer, et
