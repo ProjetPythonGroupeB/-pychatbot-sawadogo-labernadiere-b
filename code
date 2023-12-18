@@ -152,44 +152,15 @@ def idf(Dossier):
     '''Prend en argument le dossier contenant tous les textes nettoyer, et
 calcul l'IDF de tout les mots des fichiers sous forme d'un dictionnaire avec
 comme clef le mot et comme valeur son score IDF'''
-
-    # 1 - On récupère le score TF de chaque fichier
-
-    Score = []
-    liste_fichiers = os.listdir(Dossier)
-    # On liste tout les fichiers du dossier
+    Score, nb_doc, IDF, Compteur = [], len(os.listdir(Dossier)), {}, {}
+    liste_fichiers = os.listdir(Dossier) # On liste tout les fichiers du dossier
     for fichiers in liste_fichiers:
-        repertoire_courant = os.getcwd()
-        chemin_fichier = os.path.join(repertoire_courant, Dossier , fichiers)
-        texte = open(chemin_fichier, 'r')
-        # On ouvre chaque fichier en mode lecture
-        contenu = texte.read()
-        # On récupère le contenu du texte
-        texte.close()
-        Score.append(tf(contenu))
-        # On ajoute à la liste de score chaque TF
-    
-    # 2 - On calcul l'IDF
-
-    nb_doc = len(Score)
-    Liste_mot = []
-    # On créer une liste avec tout les mots
+        contenu = récupère_contenue(Dossier, fichiers)
+        Score.append(tf(contenu))  # On ajoute à la liste de score chaque TF 
     for i in range(nb_doc):
-        for mot in Score[i].keys():
-            if not mot in Liste_mot:
-                Liste_mot.append(mot)
-
-    IDF = {}
-    # On initialise le dictionnaire qui contiendra les valeurs
-    
-    for mot in Liste_mot:
-        compteur = 0
-        for i in range(nb_doc):
-            if mot in Score[i].keys():
-                compteur +=1
-    # Pour chaqun des mots, on compte dans combien de doc il apparait
-        IDF[mot]= math.log10(nb_doc/compteur)
-        # On applique la formule de l'IDF
+        Compteur = ajoute_dico(Compteur, Score[i]) # On crée un dico avec le nombre d'occurence de chaque mot
+    for mot in Compteur.keys():
+        IDF[mot]= math.log10(nb_doc/Compteur[mot]) # On applique la formule de l'IDF
     return IDF
 
 def tf_idf(Dossier):
