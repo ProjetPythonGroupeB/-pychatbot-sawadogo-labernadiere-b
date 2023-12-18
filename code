@@ -1,900 +1,461 @@
 import os
-
 import math
-
- 
 
 # FONCTION POUR AIDER LE CODE
 
- 
-
 def remplace_dans_nom(fichier):
-
     fichier = fichier.replace("Nomination_","")
-
     fichier = fichier.replace(".txt", "")
-
     fichier = fichier.replace("cleaned_", "")
-
     for caractere in fichier:
-
         if "0" <= caractere <= '9' :
-
             fichier = fichier.replace(caractere, "")
-
     return fichier
 
- 
-
 def récupère_contenue(Dossier, fichiers):
-
     repertoire_courant = os.getcwd()
-
     chemin_fichier = os.path.join(repertoire_courant, Dossier , fichiers)
-
     texte = open(chemin_fichier, 'r')
-
     contenu = texte.read()
-
     texte.close()
-
     return contenu
 
- 
-
-def ajoute_dico(dico, liste_mot):  
-
+def ajoute_dico(dico, liste_mot):   
     for mot in liste_mot:
-
             if mot in dico:
-
                 dico[mot]+=1
-
             else:
-
                 dico[mot] =1
-
     return dico
 
- 
-
 def list_of_files(directory, extension):
-
     files_names = []
-
     for filename in os.listdir(directory):
-
         if filename.endswith(extension):
-
             files_names.append(filename)
-
     return files_names
 
- 
-
 directory = "speeches"
-
 files_names = list_of_files(directory, "txt")
-
- 
 
 # PARTIE 1
 
- 
-
 def extrait_nom_président(dossier):
-
     '''Prend en argument un dossier contenant des fichiers avec des noms
-
 de président, et renvoit une liste avec tous leurs noms'''
 
- 
-
     presidents_name = []
-
     # Initialise la liste qui va contenir le nom des présidents
-
     for filename in os.listdir(dossier):
-
         # On récupère la liste des noms de fichiers
-
         filename = remplace_dans_nom(filename)
-
                 # On supprime tout ce qui n'est pas le prenom
-
         presidents_name.append(filename)
-
         # On ajoute le nom du fichier modifié à la liste des noms
-
     return presidents_name
 
- 
-
 def Prenom_et_nom(dossier):
-
     '''Prend en argument un dossier sous la même forme que la précédente
-
 et renvoi à partir de ça une liste contenant le prénom et nom de chaque président'''
-
-   
-
+    
     president_name = []
-
     # Initialise la liste qui va contenir les prenoms et noms des présidents
-
     for filename in os.listdir(dossier):
-
-        # On parcourt la liste des noms
-
+        # On parcourt la liste des noms 
         filename = filename.replace("Chirac", "Jacques Chirac")
-
         filename = filename.replace("Giscard dEstaing", "Valery Giscard dEstaing ")
-
         filename = filename.replace("Hollande", "François Hollande")
-
         filename = filename.replace("Macron", "Emmanuel Macron")
-
         filename = filename.replace("Mitterand", "François Mitterand")
-
         filename = filename.replace("Sarkozy", "Nicolas Sarkozy")
-
         filename = filename.replace("Nomination", "")
-
         filename = filename.replace(".txt", "")
-
-        # On remplace chaque nom par leur nom et prénom, et on supprime
-
+        # On remplace chaque nom par leur nom et prénom, et on supprime 
         # Tout ce qui n'est pas le nom du président
-
         for caractere in filename:
-
             if "0" <= caractere <= '9' :
-
                 filename = filename.replace(caractere, "")
-
                 # On supprime aussi tout les caractères numériques
-
         president_name.append(filename)
-
         # On ajoute tout cela à la liste
-
     return president_name
 
- 
-
 def affiche_les_prenoms(liste):
-
     '''Prend en argument une liste de prénom et la renvoi sans les doublons'''
-
-   
-
+    
     sans_doublon = []
-
-    # Initialise la liste des
-
+    # Initialise la liste des 
     for element in liste:
-
         # Parcourt tout les éléments de la liste donné en argument
-
         if element not in sans_doublon:
-
             sans_doublon.append(element)
-
             # Si cet élément n'est pas dans la nouvelle liste, on l'ajoute
-
     print(sans_doublon)
 
- 
-
-def minuscule(Dossier):
-
+def minuscule(Dossier): 
     '''Prend en argument le nom du Dossier contenant tout les fichiers des discours
-
     -- > Crée un nouveau fichier par texte, en transformant toute les majuscules en minuscules                 '''
-
-   
-
+    
     liste_fichiers = os.listdir(Dossier)
-
     # Liste tout les fichiers du dossier pris en argument
-
     for fichiers in liste_fichiers:
-
-        # Parcourt les fichiers du dossier
-
+        # Parcourt les fichiers du dossier 
         fichier= open("cleaned_"+ fichiers, "w+")
-
         # Creer le fichier avec le préfix 'cleaned'  
-
         repertoire_courant = os.getcwd()
-
         chemin_fichier = os.path.join(repertoire_courant, Dossier , fichiers)
-
         texte = open(chemin_fichier, 'r')
-
-        # Ouvre chaque fichier  
-
+        # Ouvre chaque fichier   
         for mot in texte:
-
             for lettre in mot:
-
                 if ord(lettre) >= 65 and ord(lettre) <= 90:
-
                     fichier.write(chr(ord(lettre)+32))
-
                     # Transforme les majuscules en minuscules
-
                 else:
-
                     fichier.write(lettre)
-
         fichier.close()
-
-       
-
+        
 def supprime_ponct(Dossier):
-
-    ''' Prend en argument un dossier contenant des fichiers avec uniquement
-
-    des caractères en minuscules et de la ponctuation, et le renvoit avec la
-
+    ''' Prend en argument un dossier contenant des fichiers avec uniquement 
+    des caractères en minuscules et de la ponctuation, et le renvoit avec la 
     ponctuation remplacé par des espaces'''
-
     repertoire_courant, chemin_fichier = os.getcwd(), os.path.join(repertoire_courant, Dossier , fichiers)
-
     liste_fichiers = os.listdir(Dossier)    
-
     for fichiers in liste_fichiers:
-
         contenu = récupère_contenue(Dossier, fichiers) # On récupère le contenu du texte
-
         for i in range(126):
-
             if i < 97 or i >122 or i == 32:
-
                 contenu = contenu.replace(chr(i), ' ') # On supprime tout ce qui n'est pas des lettre
-
         texte = open(chemin_fichier, 'w')
-
         texte.write(contenu) # On écrit le nouveau contenu
 
- 
-
 def tf(chaîne):
-
     '''Prend en entrée une chaîne de caractère et renvoie un dictionnaire
-
 contenant le nombre d'apparition de chaque mot'''
-
-   
-
+    
     dico = {}
-
     # Initialise un dictionnaire vide
-
     liste_mot = chaîne.split()
-
     # Met tout les mots de la châine dans une liste
-
     for mot in liste_mot:
-
         if mot in dico:
-
             dico[mot]+=1
-
         else:
-
             dico[mot] =1
-
     # Si le mot est dans le dico, on augmente sa valeur de 1, sinon on l'ajoute
-
     return dico
 
- 
-
 def idf(Dossier):
-
     '''Prend en argument le dossier contenant tous les textes nettoyer, et
-
 calcul l'IDF de tout les mots des fichiers sous forme d'un dictionnaire avec
-
 comme clef le mot et comme valeur son score IDF'''
-
- 
 
     # 1 - On récupère le score TF de chaque fichier
 
- 
-
     Score = []
-
     liste_fichiers = os.listdir(Dossier)
-
     # On liste tout les fichiers du dossier
-
     for fichiers in liste_fichiers:
-
         repertoire_courant = os.getcwd()
-
         chemin_fichier = os.path.join(repertoire_courant, Dossier , fichiers)
-
         texte = open(chemin_fichier, 'r')
-
         # On ouvre chaque fichier en mode lecture
-
         contenu = texte.read()
-
         # On récupère le contenu du texte
-
         texte.close()
-
         Score.append(tf(contenu))
-
         # On ajoute à la liste de score chaque TF
-
-   
-
+    
     # 2 - On calcul l'IDF
 
- 
-
     nb_doc = len(Score)
-
     Liste_mot = []
-
     # On créer une liste avec tout les mots
-
     for i in range(nb_doc):
-
         for mot in Score[i].keys():
-
             if not mot in Liste_mot:
-
                 Liste_mot.append(mot)
 
- 
-
     IDF = {}
-
     # On initialise le dictionnaire qui contiendra les valeurs
-
-   
-
+    
     for mot in Liste_mot:
-
         compteur = 0
-
         for i in range(nb_doc):
-
             if mot in Score[i].keys():
-
                 compteur +=1
-
     # Pour chaqun des mots, on compte dans combien de doc il apparait
-
         IDF[mot]= math.log10(nb_doc/compteur)
-
         # On applique la formule de l'IDF
-
     return IDF
 
- 
-
 def tf_idf(Dossier):
-
     ''' Calcul le TF-IDF à de chaque mot contenu dans les dicours '''
 
- 
-
     Score = []
-
     liste_fichiers = os.listdir(Dossier) # On liste tout les fichiers du dossier
-
     for fichiers in liste_fichiers:
-
         contenu = récupère_contenue(Dossier, fichiers) # On récupère le contenu du texte
-
-        Score.append(tf(contenu)) # On ajoute à la liste de score chaque TF
-
-   
-
+        Score.append(tf(contenu)) # On ajoute à la liste de score chaque TF 
+    
     IDF = idf('cleaned') # On récupère le score IDF de chaque mot
-
     TF_IDF = [[],[],[],[],[],[],[],[]]
-
     nb_doc = len(Score)
-
     for mot in IDF.keys():
-
         for i in range(nb_doc):
-
             if mot not in Score[i].keys():
-
                 TF_IDF[i].append(0)
-
             else:
-
-                TF_IDF[i].append(IDF[mot]* Score[i][mot]) # On a crée la matrice
-
+                TF_IDF[i].append(IDF[mot]* Score[i][mot]) # On a crée la matrice 
     return TF_IDF
-
- 
 
 # PARTIE 2
 
- 
-
 def tokenisation(question):
-
     '''Prend en argument une question et renvoit une liste contenant tout les mots en minuscule'''
-
     nv_qq = ''
-
     for lettre in question:
-
         if ord(lettre) >= 65 and ord(lettre) <= 90:
-
             nv_qq += chr(ord(lettre)+32)
-
         elif ord(lettre) >= 97 and ord(lettre) <= 122:
-
             nv_qq += lettre
-
         elif lettre == 'é' or lettre == 'è' or lettre == 'ê' or lettre == 'à' or lettre == 'ù' or lettre == 'î' or lettre == 'â':
-
             nv_qq += lettre
-
         else:
-
             nv_qq += ' '
-
             # On supprilme tout ce qui n'est pas des lettres
-
         L = nv_qq.split() # On créer une liste à partir des mots restants
-
     return L
 
- 
-
 def recherche(question):
-
     '''Prend en paramètre une question et renvoit la liste des mots présent dans la question et
-
     dans le corpus de texte'''
-
     Tout_les_mots, Présent = [], []
-
     IDF = idf('cleaned')
-
     for clef in IDF.keys():
-
         Tout_les_mots.append(clef) # On ajoute tout les mots dans une liste
-
     liste_qq = tokenisation(question) # On fait de même avec la question
-
     for mot in liste_qq:
-
         if mot in Tout_les_mots:
-
             Présent.append(mot) # On compare et retient que ceux présent dans les 2
-
     return Présent
 
- 
-
 def tf_idf_qq(question):
-
     ''' Prend en argument une question et renvoit le vecteur TF_IDF de la question'''
-
-    liste_chaine, chaine = tokenisation(question), ''
-
+    liste_chaine, chaine = tokenisation(question), '' 
     for mot in liste_chaine:
-
-        chaine += mot + ' ' # On crée une chaine de caractère a partir des mots de la question
-
+        chaine += mot + ' ' # On crée une chaine de caractère a partir des mots de la question 
     TF, IDF, tf_idf = tf(chaine), idf('cleaned'), []
-
     for mot in IDF.keys():
-
-        tf_idf.append( IDF[mot] * TF[mot]) # On ajoute le score de chaque mot
-
+        if mot not in liste_chaine: tf_idf.append(0)
+        else: tf_idf.append( IDF[mot] * TF[mot]) # On ajoute le score de chaque mot
     return tf_idf
 
- 
-
 def scalaire(A, B):
-
     ''' Prend 2 vecteurs et renvoit leur produit scalaire'''
-
     scal = 0
-
     for i in range(len(A)):
-
         scal += A[i]*B[i] # On calcul la valeur du produit scalaire
-
     return scal
 
- 
-
 def norme(A):
-
     '''Prend un vecteur et renvoit sa norme'''
-
     Norme = 0
-
     for i in range(len(A)):
-
         Norme += A[i]* A[i]
-
     Norme = math.sqrt(Norme) # On calcul la valeur de la norme
-
     return Norme
 
- 
-
 def similarite(A, B):
-
     """Prend 2 vecteurs et renvoit leur similarité : similarité de 1 veur dire que les 2 vecteurs
-
     sont égaux et tend vers 0 quand ils sont très differents"""
-
     return (scalaire(A,B))/(norme(A)*norme(B))
 
- 
-
 def pertinent(tidf_matrice, tidf_question):
-
     '''Choisi le discours le plus adapté pour répondre à la question grâce à la similarité et renvoit
-
     donc l'indice du texte '''
-
-    similarité, indice = 0, O
-
+    similarité, indice = 0, 0
     for i in range(len(tidf_matrice)):
-
-        if similarite(tidf_matrice[i], tidf_question) > similarité:
-
-            similarité = similarite(tidf_matrice[i], tidf_question)
-
+        if similarite(tidf_matrice[i], tidf_question) > similarité: 
+            similarité = similarite(tidf_matrice[i], tidf_question) 
             indice = i # Si la similarité est plus grande, on prend la nouvelle
-
     return indice # Modification personnelle : On retourne l'indice du texte pour rendre l'usage de la fonction plus simple
 
- 
-
 def mot_plus_haut(tf_idf):
-
     ''' Renvoit a partir d'un veteur tf_idf le mot avec le plus haut score'''
-
     plus_fort, indice = 0, 0
-
     for i in range(len(tf_idf)):
-
-        if tf_idf[i] > plus_fort:
-
-            plus_fort=tf_idf[i]
-
+        if tf_idf[i] > plus_fort: 
+            plus_fort=tf_idf[i] 
             indice = i # On récupère l'indice du mot le plus fort
-
     IDF = idf('cleaned')
-
     liste_cles = list(IDF.keys()) # Pour retrouver le mot dans IDF grâce à l'indice
-
     return liste_cles[indice]
 
- 
-
 def réponse(indice_doc, mot, Dossier):
-
     """Génère une réponse à partir d'un document, d'un mot et du dossier du document
-
     -> La réponse = la phrase de la première occurence du mot dans le document en argument """
-
     filename = os.listdir('speeches')
-
     contenu = récupère_contenue(Dossier, filename[indice_doc]) # On récupère le contenu du document
-
     liste = contenu.split('.') # On sépare le texte dans une liste à chaque point
-
     for i in range (len(liste)):
-
         if mot in liste[i]:
-
             return liste[i] # Dès que l'on trouve le mot, on renvoit la phrase dans laquelle il a été trouvé
-
-   
-
+    
 def un_peu_plus_humain(question, réponse):
-
     ''' A partir d'une question et de la réponse, rend cette réponse un peu plus vivante'''
-
     Dico = {'Comment': 'Après analyse, ', 'Pourquoi': 'Car, ', 'Peux-tu': 'Oui, bien sûr !', 'As tu': 'Oui, '}
-
     for clef in Dico.keys():
-
         if clef in question:
-
             réponse = Dico[clef] + réponse # On ajoute au début la formule un peu plus humaine
-
     return réponse
 
- 
 
 # QUESTIONS
 
- 
-
 def qq1():
-
     ''' Afficher la liste des mots les moins importants dans le corpus de documents. Un mot est dit non important,
-
 si son TD-IDF = 0 dans tous les fichiers. '''
-
     IDF, non_important  = idf('cleaned'), []
-
     for mot in IDF.keys():
-
         if IDF[mot] == 0 : non_important.append(mot) # On récupère les mots ayant un score IDF de 0
-
     return non_important
 
- 
-
 def qq2(TF_IDF):
-
     '''Afficher le(s) mot(s) ayant le score TD-IDF le plus élevé'''
-
-    grand, L, IDF = 0, [], idf('cleaned')
-
+    grand, L, IDF = 0, [], idf('cleaned') 
     liste_cles= list(IDF.keys())
-
     for i in range(len(TF_IDF)):
-
         for j in range(len(TF_IDF[i])):
-
             if TF_IDF[i][j]> grand:
-
                 grand = TF_IDF[i][j] # On cherche la plus haute valeur de TD-IDF
-
     for i in range(len(TF_IDF)):
-
         for j in range(len(TF_IDF[i])):
-
             if TF_IDF[i][j] == grand:
-
                 L.append(liste_cles[j]) # Dès qu'on la trouve, on ajoute le mot qui correspond
-
     return L
 
- 
-
 def qq3(Dossier):
-
     '''Indiquer le(s) mot(s) le(s) plus répété(s) par le président Chirac hormis les mots dits « non importants »'''
-
     liste_fichiers, Score, Occurence, grand, Mots = os.listdir(Dossier), [], {}, 0, []
-
     # On liste tout les fichiers du dossier
-
     for fichiers in liste_fichiers:
-
         if 'Chirac' in fichiers:
-
             contenu = tokenisation(récupère_contenue(Dossier, fichiers)) # On récupère la liste des mots de chirac
-
         for mot in qq1():
-
             while mot in contenu:
-
                 contenu.remove(mot) # On supprime tout les 'non importants'
-
         Score.append(contenu)
-
     for list in contenu:
-
         Occurence = ajoute_dico(Occurence, list) # On met dans Occurence l'occurence de chaque mot
-
     return max(Occurence) # On renvoit la clef avec la plus grosse occurence
 
- 
 
 def qq4(Dossier):
-
     '''Indiquer le(s) nom(s) du (des) président(s) qui a (ont) parlé de la « Nation » et celui qui l’a répété le plus de
-
 fois'''
-
     L = extrait_nom_président('speeches') # On récupère la liste des noms des présidents
-
     liste_fichiers = os.listdir(Dossier)
-
     for fichiers in liste_fichiers:
-
         contenu = récupère_contenue(Dossier, fichiers) # On récupère le contenu de chaque texte
-
         president = fichiers
-
         president = remplace_dans_nom(president) # On récupère le nom indiqué dans le nom du fichier
-
         if 'nation' in contenu: pass
-
         else: L.remove(president) # On supprime une occurence du nom dans la liste si il parle pas de nation
-
     affiche_les_prenoms(L)
 
- 
-
 def qq5(Dossier):
-
     '''Indiquer le(s) nom(s) du (des) président(s) qui a (ont) parlé du climat et/ou de l’écologie'''
-
     Resultat, prenom = [], ''
-
     filename = os.listdir(Dossier)
-
     for fichier in filename:
-
         contenu = récupère_contenue(Dossier, fichier) #  On récupère le contenu de chaque texte
-
-        if 'climat' in contenu or 'ecologie' in contenu :
-
+        if 'climat' in contenu or 'ecologie' in contenu : 
             prenom = remplace_dans_nom(fichier) # On récupère le nom à partir du nom du fichier
-
             Resultat.append(prenom) # Et on ajoute le nom
-
     return Resultat
 
- 
-
 def qq6(Dossier):
-
     ''' Hormis les mots dits « non importants », quel(s) est(sont) le(s) mot(s) que tous les présidents ont évoqués.
-
     Attention : Quelques erreurs remarqués
-
 '''
-
     D, Liste_6, Liste_7, L= {}, [], [], []
-
     liste_fichiers = os.listdir(Dossier)
-
     for fichiers in liste_fichiers:
-
         contenu = récupère_contenue(Dossier, fichiers) # On récupère le contenu de chaque texte
-
         liste_mot = contenu.split()
-
         ajoute_dico(D, liste_mot) # Et on ajoute à D les occurences de chaque mot
-
     for key in D.keys():
-
         if D[key] == 7: Liste_7.append(key)
-
         if D[key] == 6: Liste_6.append(key)
-
     for mot in Liste_6:
-
         if (mot in récupère_contenue(Dossier, 'cleaned_Nomination_Chirac1.txt') and mot in récupère_contenue(Dossier, 'cleaned_Nomination_Chirac2.txt')) or (mot in récupère_contenue(Dossier, 'cleaned_Nomination_Mitterrand1.txt') and mot in récupère_contenue(Dossier, 'cleaned_Nomination_Mitterrand2.txt')):
-
             pass
-
         else:
-
             L.append(mot) # Si il n'est pas dans les 2 textes de Chirac OU les 2 textes de Mitterand on l'ajoute
-
     for mot in Liste_7:
-
         if (mot in récupère_contenue(Dossier, 'cleaned_Nomination_Chirac1.txt') and mot in récupère_contenue(Dossier, 'cleaned_Nomination_Chirac2.txt')) and (mot in récupère_contenue(Dossier, 'cleaned_Nomination_Mitterrand1.txt') and mot in récupère_contenue(Dossier, 'cleaned_Nomination_Mitterrand2.txt')):
-
             pass
-
         else:
-
             L.append(mot) # Si il n'est pas dans les 2 textes de Chirac ET les 2 textes de Mitterand on l'ajoute
-
     print(L)
 
- 
-
 def répond_a_question():
-
     '''Permet de poser une question et d'y répondre'''
-
-    question = input("Posez votre question : ")
-
+    question = input("Posez votre question : ") 
     tidf = tf_idf_qq(question) # On prend le vecteur de la question
-
     tidfmat = tf_idf('cleaned') # On prend la matrice TF-IDF du corpus de doc
-
-    indice_doc = pertinent(tidfmat, tidf, os.listdir('cleaned')) # On récupère l'indice du doc le plus pertinant
-
+    indice_doc = pertinent(tidfmat, tidf) # On récupère l'indice du doc le plus pertinant
     mot = mot_plus_haut(tidf) # On récupère le mot le plus important de la question
-
     rep = réponse(indice_doc, mot, 'speeches') # On génère une réponse
-
     print(un_peu_plus_humain(question, rep)) # Et on affiche la réponse un peu amélioré
 
- 
 
 # PROGRAMME PRINCIPALE
 
- 
-
 Question = True
-
 while Question:
-
     qq= input('''
-
+Séléctionnez :
 [1] : Affiche la liste des mots 'non importants'
-
 [2] : Affiche la liste de(s) mot(s) avec le score TF-IDF le plus élevé de la matrice
-
 [3] : Affiche le(s) mot(s) le(s) plus répété(s) par Chirac
-
 [4] : Affiche le(s) président(s) ayant évoqué 'la nation'
-
 [5] : Affiche les présidents à parler de climat ou d'écologie
-
 [6] : Affiche la liste des mots évoqués par tout les présidents mais qui ne sont pas 'non important'
-
 [question] : Répond à votre question grâce à notre super IA
 
- 
-
 ''')
-
     if qq == '1':
-
         a = qq1()
-
         print('La liste des mots dits "non importants" sont', a)
-
     elif qq == '2':
-
         a = qq2(tf_idf('cleaned'))
-
         print('La liste des mots avec le Score TF-IDF le plus élevé sont', a)
-
     elif qq == '3':
-
         a = qq3('cleaned')
-
         print('Le(s) mot(s) le(s) plus répété(s) par Chirac est/sont : ', a)
-
     elif qq == '4':
-
         print('Le(s) président(s) à avoir évoquer la nation sont')
-
         a = qq4('cleaned')
-
     elif qq == '5':
-
         print("Les présidents parlant de climat ou d'écologie sont : " , qq5('cleaned'))
-
     elif qq == '6':
-
         print('La liste des mots répétés par tout les présidents mais qui ne sont pas non important est : ')
-
         a = qq6('cleaned')
-
     elif qq == 'question':
-
         répond_a_question()
-
     else:
-
         print("Cette question n'est pas défini")  
-
-   
-
+    
     Continue= input("""
-
                     Avez vous d'autres questions ?
-
                      """)
-
     if Continue == 'Oui' or Continue == 'oui': pass
+    else: Question = False   
+        
 
-    else: Question = False 
+
+
+
 
